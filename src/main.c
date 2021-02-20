@@ -82,12 +82,12 @@ void read_strings(int fd, char*** ptr_buffer, size_t* res_size) { // Считы�
     char c; // Текущий считываемый символ
     int str_idx = 0; // Индекс текущего слова
     size_t buffer_size = 1; // Кол-во строк
-    char** buffer = malloc(sizeof(char*) * buffer_size);
+    char** buffer = (char**)malloc(sizeof(char*) * buffer_size);
     if (!buffer) {
         perror("Malloc error");
         exit(ERR_MALLOC);
     }
-    int* lengths = malloc(sizeof(int) * buffer_size);
+    int* lengths = (int*)malloc(sizeof(int) * buffer_size);
     if (!lengths) {
         perror("Malloc error");
         exit(ERR_MALLOC);
@@ -95,7 +95,7 @@ void read_strings(int fd, char*** ptr_buffer, size_t* res_size) { // Считы�
 
     lengths[0] = 0;
     int str_size = 1; // Длина текущей строки
-    buffer[0] = malloc(sizeof(char) * str_size);
+    buffer[0] = (char*)malloc(sizeof(char) * str_size);
     if (!buffer[0]) {
         perror("Malloc error");
         exit(ERR_MALLOC);
@@ -122,13 +122,13 @@ void read_strings(int fd, char*** ptr_buffer, size_t* res_size) { // Считы�
             ++buffer_size;
             str_size = 1;
 
-            buffer = realloc(buffer, sizeof(char*) * buffer_size);
+            buffer = (char**)realloc(buffer, sizeof(char*) * buffer_size);
             if (!buffer) {
                 perror("Realloc error");
                 exit(ERR_REALLOC);
             }
 
-            buffer[buffer_size - 1] = malloc(sizeof(char) * str_size);
+            buffer[buffer_size - 1] = (char*)malloc(sizeof(char) * str_size);
             if (!buffer[buffer_size - 1]) {
                 perror("Malloc error");
                 exit(ERR_MALLOC);
@@ -137,7 +137,7 @@ void read_strings(int fd, char*** ptr_buffer, size_t* res_size) { // Считы�
                 buffer[buffer_size - 1][i] = 0;
             }
 
-            lengths = realloc(lengths, sizeof(int) * buffer_size);
+            lengths = (int*)realloc(lengths, sizeof(int) * buffer_size);
             if (!lengths) {
                 perror("Realloc error");
                 exit(ERR_REALLOC);
@@ -149,7 +149,7 @@ void read_strings(int fd, char*** ptr_buffer, size_t* res_size) { // Считы�
         if (lengths[str_idx] == str_size) {
             //printf("Increasing str len\n");
             str_size += 16;
-            buffer[str_idx] = realloc(buffer[str_idx], sizeof(char) * str_size);
+            buffer[str_idx] = (char*)realloc(buffer[str_idx], sizeof(char) * str_size);
             if (!buffer[str_idx]) {
                 perror("Realloc error");
                 exit(ERR_REALLOC);
@@ -168,7 +168,7 @@ void read_strings(int fd, char*** ptr_buffer, size_t* res_size) { // Считы�
     }
 
     for (int i = 0; i < buffer_size; ++i) {
-        buffer[i] = realloc(buffer[i], sizeof(char) * lengths[i]);
+        buffer[i] = (char*)realloc(buffer[i], sizeof(char) * lengths[i]);
         if (!buffer[i]) {
             perror("Realloc error");
             exit(ERR_REALLOC);
@@ -188,7 +188,7 @@ void read_string(int fd, char** str, size_t* size) { // Считывает од�
     char c; // Текущий считываемый символ
     size_t str_len = 0;
     size_t str_size = 1; // Длина текущей строки
-    char* buffer = malloc(sizeof(char) * str_size);
+    char* buffer = (char*)malloc(sizeof(char) * str_size);
     if (!buffer) {
         perror("Malloc error");
         exit(ERR_MALLOC);
@@ -209,7 +209,7 @@ void read_string(int fd, char** str, size_t* size) { // Считывает од�
         if (str_len == str_size) {
             //printf("Increasing str len\n");
             str_size += 16;
-            buffer = realloc(buffer, sizeof(char) * str_size);
+            buffer = (char*)realloc(buffer, sizeof(char) * str_size);
             if (!buffer) {
                 perror("Realloc error");
                 exit(ERR_REALLOC);
@@ -220,7 +220,7 @@ void read_string(int fd, char** str, size_t* size) { // Считывает од�
         ++str_len;
     }
 
-    buffer = realloc(buffer, sizeof(char) * str_len);
+    buffer = (char*)realloc(buffer, sizeof(char) * str_len);
     if (!buffer) {
         perror("Realloc error");
         exit(ERR_REALLOC);
@@ -298,7 +298,7 @@ int main() {
 
         // Читаем размер строки и строку
         read_from_fd(fd[0], &path_size, sizeof(size_t));
-        char* path = malloc(sizeof(char) * path_size);
+        char* path = (char*)malloc(sizeof(char) * path_size);
         if (!path) {
             exit(ERR_REALLOC);
         }
